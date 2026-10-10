@@ -4,8 +4,6 @@ option go_package = "github.com/gaoliveira21/grpc-go/proto";
 
 package helloworld;
 
-
-
 message HelloRequest {
   string name = 1;
 }
@@ -14,6 +12,29 @@ message HelloReply {
   string message = 1;
 }
 
+enum GreetingType {
+  option allow_alias = true;
+  FORMAL      = 0;
+  UNKNOWN     = 0;
+  INFORMAL    = 1;
+}
+
+message UserDetails {
+  string name      = 1;
+  uint32 age       = 2;
+  bool   is_active = 3;
+}
+
+message GreetRequest {
+  GreetingType type = 1;
+  UserDetails  user = 2;
+}
+
+message GreetReply {
+  string message = 1;
+}
+
 service Greeter {
-  rpc SayHello(HelloRequest) returns (HelloReply) {}
+  rpc SayHello(HelloRequest) returns (HelloReply){}
+  rpc Greet(GreetRequest) returns (GreetReply){}
 }
