@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option go_package = "github.com/gaoliveira21/stock_market/protos";
+
+package stock_market;
+
+message StockRequest {
+  string symbol = 1;
+}
+
+message StockResponse {
+  string symbol = 1;
+  double price = 2;
+  int64 timestamp = 3;
+}
+
+service StockPrice {
+  rpc GetStockPrice (StockRequest) returns (StockResponse);
+}
+
