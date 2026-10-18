@@ -16,5 +16,5 @@ message StockResponse {
 
 service StockPrice {
   rpc GetStockPrice (StockRequest) returns (StockResponse);
+  rpc GetStockPriceStreaming(StockRequest) returns (stream StockResponse);
 }
-
