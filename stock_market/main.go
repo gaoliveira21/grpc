@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"log/slog"
 	"math/rand"
 	"net"
 	"time"
@@ -16,6 +17,8 @@ type StockPriceServer struct {
 }
 
 func (s *StockPriceServer) GetStockPrice(ctx context.Context, req *pb.StockRequest) (*pb.StockResponse, error) {
+	slog.Info("Request received for ", req.GetSymbol(), "")
+
 	price := rand.Float64()
 
 	return &pb.StockResponse{
