@@ -9,12 +9,22 @@ message StockRequest {
 }
 
 message StockResponse {
+  string symbol    = 1;
+  double price     = 2;
+  int64  timestamp = 3;
+}
+
+message UpdateStockPriceRequest {
   string symbol = 1;
   double price = 2;
-  int64 timestamp = 3;
+}
+
+message UpdateStockPriceResponse {
+  string message = 1;
 }
 
 service StockPrice {
   rpc GetStockPrice (StockRequest) returns (StockResponse);
   rpc GetStockPriceStreaming(StockRequest) returns (stream StockResponse);
+  rpc UpdateStockPriceClientStreaming(stream UpdateStockPriceRequest) returns (UpdateStockPriceResponse);
 }
