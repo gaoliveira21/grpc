@@ -17,13 +17,34 @@ const proto = grpc.loadPackageDefinition(packageDefinition).stock_market
 async function main() {
   const client = new proto.StockPrice(SERVER_ADDR, grpc.credentials.createInsecure())
 
-  client.getStockPrice({ symbol: 'BBAS3' }, (err, res) => {
+  const deadline = new Date()
+  deadline.setSeconds(deadline.getSeconds() + 8)
+
+  const body = { symbol: 'BBAS3' }
+
+  client.getStockPrice(body, { deadline }, (err, res) => {
     if (err) {
       console.error(err)
       return
     }
-    console.log(res)
+    console.log('Unary response ', res)
   })
+
+  const stream = client.getStockPriceStreaming(body, { deadline });
+
+  stream.on('data', (res) => {
+    console.log('Streaming response ', res)
+  })
+
+  stream.on('error', (err) => {
+    console.error(err)
+  })
+
+  stream.on('status', (status) => {
+    console.log('status', status)
+  })
+
+  stream.on('end', () => console.log('server streaming ended'))
 }
 
 await main()
