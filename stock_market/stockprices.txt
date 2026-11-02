@@ -1,1 +1,1 @@
-{"Symbol":"eiusmod dolore","Price":2020711.1438607723}{"Symbol":"exercitation Excepteur","Price":53914455.135636985}{"Symbol":"exercitation Excepteur","Price":53914455.135636985}
+{"Symbol":"ASDF4","Price":90}{"Symbol":"PETR3","Price":100}{"Symbol":"PETR4","Price":102}{"Symbol":"TEST4","Price":150}

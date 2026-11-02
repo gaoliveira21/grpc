@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"log/slog"
@@ -62,6 +63,8 @@ func (s *StockPriceServer) UpdateStockPriceClientStreaming(stream grpc.ClientStr
 	}
 	defer f.Close()
 
+	stockCount := 0
+
 	for {
 		select {
 		case <-stream.Context().Done():
@@ -70,6 +73,9 @@ func (s *StockPriceServer) UpdateStockPriceClientStreaming(stream grpc.ClientStr
 		default:
 			msg, err := stream.Recv()
 			if err == io.EOF {
+				stream.SendMsg(&pb.UpdateStockPriceResponse{
+					Message: fmt.Sprintf("%d Ações atualizadas", stockCount),
+				})
 				slog.Info("EOF received")
 				return nil
 			}
@@ -95,6 +101,7 @@ func (s *StockPriceServer) UpdateStockPriceClientStreaming(stream grpc.ClientStr
 			}
 
 			f.Write(b)
+			stockCount++
 		}
 	}
 }
