@@ -106,6 +106,34 @@ func (s *StockPriceServer) UpdateStockPriceClientStreaming(stream grpc.ClientStr
 	}
 }
 
+func (s *StockPriceServer) GetStockPriceBidirectionalStreaming(stream grpc.BidiStreamingServer[pb.StockRequest, pb.StockResponse]) error {
+	for {
+		select {
+		case <-stream.Context().Done():
+			slog.Info("Client connection closed")
+			return nil
+		default:
+			msg, err := stream.Recv()
+			if err == io.EOF {
+				slog.Info("EOF received")
+				return nil
+			}
+
+			if err != nil {
+				slog.Error(err.Error())
+				return err
+			}
+
+			slog.Info("Buscando preço para a ação ", msg.GetSymbol(), "")
+
+			stream.Send(&pb.StockResponse{
+				Symbol: msg.GetSymbol(),
+				Price:  rand.Float64(),
+			})
+		}
+	}
+}
+
 func main() {
 	lis, err := net.Listen("tcp", "0.0.0.0:8080")
 	if err != nil {

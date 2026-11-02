@@ -27,4 +27,5 @@ service StockPrice {
   rpc GetStockPrice (StockRequest) returns (StockResponse);
   rpc GetStockPriceStreaming(StockRequest) returns (stream StockResponse);
   rpc UpdateStockPriceClientStreaming(stream UpdateStockPriceRequest) returns (UpdateStockPriceResponse);
+  rpc GetStockPriceBidirectionalStreaming(stream StockRequest) returns (stream StockResponse);
 }

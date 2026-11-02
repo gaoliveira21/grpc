@@ -1,5 +1,6 @@
 import grpc from '@grpc/grpc-js'
 import protoLoader from '@grpc/proto-loader'
+import readline from 'node:readline'
 
 const STOCK_PRICES_DATA = [
   { symbol: "ASDF4", price: 90 },
@@ -20,18 +21,18 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 
 const proto = grpc.loadPackageDefinition(packageDefinition).stock_market
 
-function serverStreaming(client, deadline) {
-  const body = { symbol: 'BBAS3' }
-
-  client.getStockPrice(body, { deadline }, (err, res) => {
+function unary(client, deadline) {
+  client.getStockPrice({ symbol: 'BBAS3' }, { deadline }, (err, res) => {
     if (err) {
       console.error(err)
       return
     }
     console.log('Unary response ', res)
   })
+}
 
-  const serverStream = client.getStockPriceStreaming(body, { deadline });
+function serverStreaming(client, deadline) {
+  const serverStream = client.getStockPriceStreaming({ symbol: 'BBAS3' }, { deadline });
 
   serverStream.on('data', (res) => {
     console.log('Streaming response ', res)
@@ -67,14 +68,41 @@ function clientStreaming(client, deadline) {
   clientStream.end()
 }
 
+function bidirectionalStream(client) {
+  const stream = client.getStockPriceBidirectionalStreaming()
+
+  stream.on('data', res => console.log(res))
+  stream.on('error', err => console.error(err))
+  stream.on('end', () => console.log("streaming ended"))
+
+  const rl = readline.createInterface({
+    input: process.stdin,
+    prompt: '<Digita a mensagem ou "sair" para sair>: ',
+    output: process.stdout
+  })
+
+  rl.on('line', line => {
+    if (line.toLowerCase() == "sair") {
+      rl.close()
+      return
+    }
+
+    stream.write({ symbol: line })
+  })
+
+  rl.on('close', () => stream.end())
+}
+
 async function main() {
   const client = new proto.StockPrice(SERVER_ADDR, grpc.credentials.createInsecure())
 
   const deadline = new Date()
   deadline.setSeconds(deadline.getSeconds() + 8)
 
-  serverStreaming(client, deadline)
-  clientStreaming(client, deadline)
+  // unary(client, deadline)
+  // serverStreaming(client, deadline)
+  // clientStreaming(client, deadline)
+  bidirectionalStream(client)
 
 }
 

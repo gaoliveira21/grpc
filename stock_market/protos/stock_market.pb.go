@@ -236,12 +236,13 @@ const file_protos_stock_market_proto_rawDesc = "" +
 	"\x06symbol\x18\x01 \x01(\tR\x06symbol\x12\x14\n" +
 	"\x05price\x18\x02 \x01(\x01R\x05price\"4\n" +
 	"\x18UpdateStockPriceResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2\x9f\x02\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage2\x83\x03\n" +
 	"\n" +
 	"StockPrice\x12H\n" +
 	"\rGetStockPrice\x12\x1a.stock_market.StockRequest\x1a\x1b.stock_market.StockResponse\x12S\n" +
 	"\x16GetStockPriceStreaming\x12\x1a.stock_market.StockRequest\x1a\x1b.stock_market.StockResponse0\x01\x12r\n" +
-	"\x1fUpdateStockPriceClientStreaming\x12%.stock_market.UpdateStockPriceRequest\x1a&.stock_market.UpdateStockPriceResponse(\x01B-Z+github.com/gaoliveira21/stock_market/protosb\x06proto3"
+	"\x1fUpdateStockPriceClientStreaming\x12%.stock_market.UpdateStockPriceRequest\x1a&.stock_market.UpdateStockPriceResponse(\x01\x12b\n" +
+	"#GetStockPriceBidirectionalStreaming\x12\x1a.stock_market.StockRequest\x1a\x1b.stock_market.StockResponse(\x010\x01B-Z+github.com/gaoliveira21/stock_market/protosb\x06proto3"
 
 var (
 	file_protos_stock_market_proto_rawDescOnce sync.Once
@@ -266,11 +267,13 @@ var file_protos_stock_market_proto_depIdxs = []int32{
 	0, // 0: stock_market.StockPrice.GetStockPrice:input_type -> stock_market.StockRequest
 	0, // 1: stock_market.StockPrice.GetStockPriceStreaming:input_type -> stock_market.StockRequest
 	2, // 2: stock_market.StockPrice.UpdateStockPriceClientStreaming:input_type -> stock_market.UpdateStockPriceRequest
-	1, // 3: stock_market.StockPrice.GetStockPrice:output_type -> stock_market.StockResponse
-	1, // 4: stock_market.StockPrice.GetStockPriceStreaming:output_type -> stock_market.StockResponse
-	3, // 5: stock_market.StockPrice.UpdateStockPriceClientStreaming:output_type -> stock_market.UpdateStockPriceResponse
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
+	0, // 3: stock_market.StockPrice.GetStockPriceBidirectionalStreaming:input_type -> stock_market.StockRequest
+	1, // 4: stock_market.StockPrice.GetStockPrice:output_type -> stock_market.StockResponse
+	1, // 5: stock_market.StockPrice.GetStockPriceStreaming:output_type -> stock_market.StockResponse
+	3, // 6: stock_market.StockPrice.UpdateStockPriceClientStreaming:output_type -> stock_market.UpdateStockPriceResponse
+	1, // 7: stock_market.StockPrice.GetStockPriceBidirectionalStreaming:output_type -> stock_market.StockResponse
+	4, // [4:8] is the sub-list for method output_type
+	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
