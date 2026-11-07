@@ -15,6 +15,8 @@ import (
 
 	pb "github.com/gaoliveira21/stock_market/protos"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type StockPriceServer struct {
@@ -82,7 +84,7 @@ func (s *StockPriceServer) UpdateStockPriceClientStreaming(stream grpc.ClientStr
 
 			if err != nil {
 				slog.Error(err.Error())
-				return err
+				return status.Errorf(codes.Unknown, "The message could not be received")
 			}
 
 			slog.Info("Novo preço para a ação", msg.GetSymbol(), ": $ ", strconv.FormatFloat(msg.GetPrice(), 'f', -1, 64), "")
@@ -121,7 +123,7 @@ func (s *StockPriceServer) GetStockPriceBidirectionalStreaming(stream grpc.BidiS
 
 			if err != nil {
 				slog.Error(err.Error())
-				return err
+				return status.Errorf(codes.Unknown, "The message could not be received")
 			}
 
 			slog.Info("Buscando preço para a ação ", msg.GetSymbol(), "")
