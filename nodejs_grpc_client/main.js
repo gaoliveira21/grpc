@@ -1,6 +1,7 @@
 import grpc from '@grpc/grpc-js'
 import protoLoader from '@grpc/proto-loader'
 import readline from 'node:readline'
+import fs from 'node:fs'
 
 const STOCK_PRICES_DATA = [
   { symbol: "ASDF4", price: 90 },
@@ -19,6 +20,7 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   oneofs: true
 })
 
+const serviceConf = fs.readFileSync("service_config.json", 'utf-8')
 const proto = grpc.loadPackageDefinition(packageDefinition).stock_market
 
 function unary(client, deadline) {
@@ -94,7 +96,9 @@ function bidirectionalStream(client) {
 }
 
 async function main() {
-  const client = new proto.StockPrice(SERVER_ADDR, grpc.credentials.createInsecure())
+  const client = new proto.StockPrice(SERVER_ADDR, grpc.credentials.createInsecure(), {
+    'grpc.service_config': serviceConf
+  })
 
   const deadline = new Date()
   deadline.setSeconds(deadline.getSeconds() + 8)
