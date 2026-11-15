@@ -13,6 +13,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gaoliveira21/stock_market/interceptors"
 	pb "github.com/gaoliveira21/stock_market/protos"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -144,7 +145,16 @@ func main() {
 
 	log.Println("Listening on port :8080")
 
-	s := grpc.NewServer()
+	s := grpc.NewServer(
+		grpc.ChainUnaryInterceptor(
+			interceptors.UnaryTraceInterceptor,
+			interceptors.UnaryAuthInterceptor,
+		),
+		grpc.ChainStreamInterceptor(
+			interceptors.StreamTraceInterceptor,
+			interceptors.StreamAuthInterceptor,
+		),
+	)
 	pb.RegisterStockPriceServer(s, &StockPriceServer{})
 
 	if err := s.Serve(lis); err != nil {
