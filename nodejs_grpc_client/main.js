@@ -23,6 +23,17 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 const serviceConf = fs.readFileSync("service_config.json", 'utf-8')
 const proto = grpc.loadPackageDefinition(packageDefinition).stock_market
 
+function authInterceptor(options, next) {
+  const requester = new grpc.RequesterBuilder()
+    .withStart((metadata, listener, next) => {
+      metadata.set('authorization', 'some-secret-token')
+      next(metadata, listener)
+    })
+    .build()
+
+  return new grpc.InterceptingCall(next(options), requester)
+}
+
 function unary(client, deadline) {
   client.getStockPrice({ symbol: 'BBAS3' }, { deadline }, (err, res) => {
     if (err) {
@@ -97,7 +108,8 @@ function bidirectionalStream(client) {
 
 async function main() {
   const client = new proto.StockPrice(SERVER_ADDR, grpc.credentials.createInsecure(), {
-    'grpc.service_config': serviceConf
+    'grpc.service_config': serviceConf,
+    'interceptors': [authInterceptor]
   })
 
   const deadline = new Date()
